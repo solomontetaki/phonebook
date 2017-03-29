@@ -54,11 +54,19 @@ public class PhoneBook implements ShellDependent {
         List<Record> result = new ArrayList<>();
         for (Record r : recordList) {
             String name = r.getName().toLowerCase();
-            if (name.contains(str)) {
+            String email = r.getEmail().toLowerCase();
+            if (name.contains(str) || email.contains(str)) {
                 result.add(r);
+            } else {
+                for (String p : r.getPhones()) {
+                    p = p.toLowerCase();
+                    if (p.contains(str)) {
+                        result.add(r);
+                        break;
+                    }
+                }
             }
         }
-        
         return result;
     }
 
