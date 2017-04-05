@@ -29,54 +29,55 @@ public class PhoneBook implements ShellDependent {
         recordList.add(r);
     }
 
-    @Command
-    public List<Record> list() {
-        return recordList;
-    }
+        @Command
+        public void createReminder(String name, String note, String time){
+            Reminder rem = new Reminder();
+            rem.setName(name);
+            rem.setNote(note);
+            rem.setTime(time);
+            recordList.add(rem);
+        }
 
-    @Command
-    public void addPhone(int id, String phone) {
-        for (Record r : recordList) {
-            if (r instanceof Person && r.getId() == id) {
-                Person p = (Person) r;
-                p.addPhones(phone);
-                break;
+        @Command
+        public List<Record> list () {
+            return recordList;
+        }
+
+        @Command
+        public void addPhone ( int id, String phone){
+            for (Record r : recordList) {
+                if (r instanceof Person && r.getId() == id) {
+                    Person p = (Person) r;
+                    p.addPhones(phone);
+                    break;
+                }
             }
         }
-    }
 
-    @Command
-    public void edit(int id) throws IOException {
-        for (Record r : recordList) {
-            if (r.getId() == id) {
-                ShellFactory.createSubshell("#" + id, theShell, "Edit record", r)
-                        .commandLoop();
-                break;
+        @Command
+        public void edit ( int id) throws IOException {
+            for (Record r : recordList) {
+                if (r.getId() == id) {
+                    ShellFactory.createSubshell("#" + id, theShell, "Edit record", r)
+                            .commandLoop();
+                    break;
+                }
             }
         }
-    }
 
-    @Command
-    public List<Record> find(String str) {
-        str = str.toLowerCase();
-        List<Record> result = new ArrayList<>();
-        for (Record r : recordList) {
-            String name = r.getName().toLowerCase();
-            String email;
-            if (r instanceof Person) {
-                Person p = (Person) r;
-                email = p.getEmail().toLowerCase();
-            } else {
-                email = "";
+        @Command
+        public List<Record> find (String str){
+            str = str.toLowerCase();
+            List<Record> result = new ArrayList<>();
+            for (Record r : recordList) {
+                if (r.contains(str)) {
+                    result.add(r);
+                }
             }
-            if (name.contains(str) || email.contains(str)) {
-                result.add(r);
-            }
+            return result;
         }
-        return result;
-    }
 
-    private Shell theShell;
+        private Shell theShell;
 
     public void cliSetShell(Shell theShell) {
         this.theShell = theShell;
