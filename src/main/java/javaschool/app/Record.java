@@ -28,4 +28,11 @@ public abstract class Record {
     public int getId() {
         return id;
     }
+
+    public boolean contains (String str) {
+        str = str.toLowerCase();
+        name = name.toLowerCase();
+        return name.contains(str);
+
+    }
 }
